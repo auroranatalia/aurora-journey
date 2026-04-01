@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurora Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;color:#2d2a24;background:#faf8f4}
+
+.hero{min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-20%;right:-15%;width:600px;height:600px;background:radial-gradient(circle,rgba(196,149,106,.08) 0%,transparent 60%);pointer-events:none}
+.tag{font-size:11px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:#b8a080;margin-bottom:28px;position:relative;z-index:1}
+h1{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(28px,4.5vw,42px);line-height:1.25;max-width:640px;margin-bottom:24px;z-index:1;position:relative}
+h1 em{font-style:italic;font-weight:400;color:#b07a4a}
+.hs{font-size:17px;font-weight:300;color:#6a6560;max-width:480px;line-height:1.7;margin-bottom:44px;z-index:1;position:relative}
+.cta{padding:17px 38px;background:#2d2a24;color:#faf8f4;border:none;border-radius:60px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;transition:all .3s;z-index:1;position:relative;text-decoration:none;display:inline-block}
+.cta:hover{background:#4a463e;transform:translateY(-2px);box-shadow:0 8px 28px rgba(45,42,36,.18)}
+
+.pillars{padding:80px 24px;max-width:800px;margin:0 auto}
+.sl{font-size:11px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:#b8a080;margin-bottom:14px}
+.pillars h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(24px,3.5vw,30px);line-height:1.35;margin-bottom:40px;max-width:500px}
+.pil{border-radius:20px;padding:36px 32px;margin-bottom:16px;transition:transform .3s}
+.pil:hover{transform:translateY(-2px)}
+.pil-head{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.pil-icon{font-size:28px}
+.pil-num{font-size:12px;font-weight:500;letter-spacing:1.5px;margin-bottom:2px}
+.pil-title{font-family:'Fraunces',serif;font-weight:400;font-size:22px}
+.pil-sub{font-size:14px;font-weight:300;color:#6a6560;margin-bottom:16px;margin-left:44px}
+.pil-items{list-style:none;margin-left:44px}
+.pil-items li{font-size:14px;line-height:1.6;font-weight:300;color:#4a463e;padding:6px 0;padding-left:16px;position:relative}
+.pil-dot{position:absolute;left:0;top:14px;width:6px;height:6px;border-radius:50%;opacity:.4}
+
+.founder{padding:40px 24px 60px;max-width:620px;margin:0 auto}
+.fc{background:linear-gradient(145deg,#f5f0e8,#f0ebe2);border-radius:20px;padding:36px 32px}
+.fi{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#c4956a,#d4a87a);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:22px;color:#fff;margin-bottom:14px}
+.fn{font-family:'Fraunces',serif;font-weight:400;font-size:19px;margin-bottom:3px}
+.fr{font-size:13px;color:#b8a080;margin-bottom:14px}
+.ft{font-size:15px;line-height:1.75;font-weight:300;color:#4a463e}
+.ft strong{font-weight:500;color:#2d2a24}
+
+.mid{padding:40px 24px 60px;max-width:520px;margin:0 auto;text-align:center}
+.mid p{font-family:'Fraunces',serif;font-weight:300;font-size:17px;line-height:1.6;color:#6a6560;font-style:italic;margin-bottom:28px}
+
+.quiz{padding:40px 24px 100px;max-width:520px;margin:0 auto}
+.quiz h2{font-family:'Fraunces',serif;font-weight:300;font-size:24px;margin-bottom:6px}
+.qsub{font-size:14px;color:#8a8478;font-weight:300;margin-bottom:28px}
+.dots{display:flex;gap:6px;margin-bottom:18px}
+.dot{width:8px;height:8px;border-radius:50%;background:#e4dfd7;transition:all .3s}
+.dot.on{background:#c4956a;width:22px;border-radius:4px}
+.dot.dn{background:#c4956a}
+.qq{font-family:'Fraunces',serif;font-weight:400;font-size:18px;margin-bottom:14px}
+.qo{display:block;width:100%;padding:14px 18px;border:1.5px solid #e8e4dc;border-radius:12px;background:#fff;font-family:'DM Sans',sans-serif;font-size:14px;color:#2d2a24;cursor:pointer;text-align:left;transition:all .2s;margin-bottom:8px}
+.qo:hover{border-color:#c8b89c;transform:translateX(4px)}
+.qo.sel{border-color:#c4956a;background:#fdf6ef}
+.sb{padding:15px 36px;background:#2d2a24;color:#faf8f4;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;transition:all .3s;margin-top:8px}
+.sb:hover{background:#4a463e}
+.sb:disabled{opacity:.3;cursor:default}
+.ta{width:100%;padding:16px 18px;border:1.5px solid #e8e4dc;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;color:#2d2a24;background:#fff;outline:none;resize:vertical;min-height:100px;line-height:1.6;margin-bottom:16px;transition:border-color .2s}
+.ta:focus{border-color:#c4956a}
+.ta::placeholder{color:#c8c0b4}
+.ta-hint{font-size:13px;color:#a09890;font-weight:300;margin-bottom:16px;line-height:1.5}
+.inp{width:100%;padding:14px 18px;border:1.5px solid #e8e4dc;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;color:#2d2a24;background:#fff;outline:none;margin-bottom:10px;transition:border-color .2s}
+.inp:focus{border-color:#c4956a}
+.inp::placeholder{color:#c8c0b4}
+.inp-label{font-size:13px;color:#6a6560;font-weight:400;margin-bottom:6px;display:block}
+
+.ty{text-align:center;padding:60px 0}
+.ty h2{font-family:'Fraunces',serif;font-weight:300;font-size:24px;margin-bottom:12px}
+.ty p{font-size:15px;line-height:1.7;color:#6a6560;font-weight:300;max-width:400px;margin:0 auto}
+.sig{margin-top:18px;font-family:'Fraunces',serif;font-style:italic;color:#b8a080;font-size:17px}
+
+.fade-in{animation:fu .35s ease}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.hidden{display:none}
+.err-msg{color:#c4956a;font-size:13px;margin-top:6px;display:none}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="tag">Aurora Journey</div>
+  <h1>You've spent years collecting <em>a life</em>.<br>Let's finally <em>put it together</em>.</h1>
+  <p class="hs">Health records in different places. A closet that doesn't feel like you. Important things stored somewhere in your head — or nowhere at all. What if we figured out — together — how to build a system around all of it?</p>
+  <button class="cta" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">See how it works ↓</button>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars">
+  <div class="sl">Three layers of your support system</div>
+  <h2>Body. Space. Clarity.</h2>
+
+  <div class="pil" style="background:linear-gradient(135deg,#f5ede4,#f0e8df)">
+    <div class="pil-head">
+      <span class="pil-icon">🫀</span>
+      <div>
+        <div class="pil-num" style="color:#b07a4a">01</div>
+        <div class="pil-title">Your body</div>
+      </div>
+    </div>
+    <div class="pil-sub">Health information that finally makes sense</div>
+    <ul class="pil-items">
+      <li><span class="pil-dot" style="background:#b07a4a"></span>Test results from different doctors and years — in one clear picture</li>
+      <li><span class="pil-dot" style="background:#b07a4a"></span>Supplements and remedies organized: what you take, why, what's running out</li>
+      <li><span class="pil-dot" style="background:#b07a4a"></span>Sleep and energy patterns you can actually read — not just collect</li>
+    </ul>
+  </div>
+
+  <div class="pil" style="background:linear-gradient(135deg,#e8efe4,#e3ead0)">
+    <div class="pil-head">
+      <span class="pil-icon">🏡</span>
+      <div>
+        <div class="pil-num" style="color:#6a8a5a">02</div>
+        <div class="pil-title">Your space</div>
+      </div>
+    </div>
+    <div class="pil-sub">Everything around you — sorted</div>
+    <ul class="pil-items">
+      <li><span class="pil-dot" style="background:#6a8a5a"></span>A wardrobe that reflects who you are now, not five years ago</li>
+      <li><span class="pil-dot" style="background:#6a8a5a"></span>Documents, files, records — findable in seconds, not buried in folders</li>
+      <li><span class="pil-dot" style="background:#6a8a5a"></span>Family logistics that run without living in your head</li>
+    </ul>
+  </div>
+
+  <div class="pil" style="background:linear-gradient(135deg,#e8e4f0,#e0dcec)">
+    <div class="pil-head">
+      <span class="pil-icon">🔭</span>
+      <div>
+        <div class="pil-num" style="color:#7a6a8a">03</div>
+        <div class="pil-title">Your clarity</div>
+      </div>
+    </div>
+    <div class="pil-sub">Knowing what's happening — and what to do next</div>
+    <ul class="pil-items">
+      <li><span class="pil-dot" style="background:#7a6a8a"></span>A weekly check-in with yourself: not productivity, just honesty</li>
+      <li><span class="pil-dot" style="background:#7a6a8a"></span>Signals you've been noticing but not acting on — named and visible</li>
+      <li><span class="pil-dot" style="background:#7a6a8a"></span>A dashboard of your life that you built and you understand</li>
+    </ul>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section class="founder">
+  <div class="fc">
+    <div class="fi">N</div>
+    <div class="fn">Natasha Shagarina</div>
+    <div class="fr">Founder of Aurora · Mother of three · London</div>
+    <p class="ft">I built all of this for myself first — <strong>not because I'm a tech person, but because I was drowning in my own life and needed a way out.</strong> Now I want to explore this with others. Aurora Journey is a shared exploration: small group calls where we trade ideas, honest conversations about what actually works, and your feedback shaping where we go next. I don't have all the answers — but I have a path, and it's better walked together.</p>
+  </div>
+</section>
+
+<!-- PROMISE -->
+<section class="mid">
+  <p>This is a shared journey, not a polished product. We'll meet on calls, share what's working, inspire each other with real use cases — and your feedback will shape what Aurora becomes.</p>
+  <button class="cta" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">I'm curious →</button>
+</section>
+
+<!-- QUIZ -->
+<section class="quiz" id="quiz">
+  <div id="quiz-content"></div>
+</section>
+
+<script>
+const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL';
+
+const QUIZ = [
+  {
+    id: "start",
+    q: "Where do you feel it most?",
+    opts: [
+      "My health info is scattered — I can't see the full picture",
+      "My surroundings don't reflect who I've become",
+      "I carry everything in my head and I'm running out of room",
+      "Honestly — all three"
+    ]
+  },
+  {
+    id: "ai",
+    q: "How familiar are you with AI tools?",
+    opts: [
+      "Brand new — curious but haven't tried",
+      "Tried some, nothing stuck",
+      "Use a few, want a real system"
+    ]
+  },
+  {
+    id: "hope",
+    q: "What would it feel like to have this sorted?",
+    opts: [
+      "Relief — I'd stop carrying it all alone",
+      "Confidence — I'd trust my own information",
+      "Freedom — I'd have space to think again"
+    ]
+  },
+  {
+    id: "build_first",
+    q: "If we started tomorrow — what would you want to build first?",
+    opts: [
+      "A place for all my health data that I can actually use",
+      "A system that keeps my home and family running smoother",
+      "A weekly rhythm that helps me think, not just react",
+      "I don't know yet — that's what I'd need help figuring out"
+    ]
+  }
+];
+
+let step = 0;
+let answers = {};
+const el = document.getElementById('quiz-content');
+
+function renderIntro() {
+  el.innerHTML = `
+    <div class="sl">Before we begin</div>
+    <h2>Four quick questions</h2>
+    <p class="qsub">So I know where to start with you.</p>
+  `;
+  setTimeout(() => renderQuestion(), 100);
+}
+
+function renderQuestion() {
+  if (step >= QUIZ.length) {
+    renderContactForm();
+    return;
+  }
+  const q = QUIZ[step];
+  let dots = QUIZ.map((_, i) =>
+    `<div class="dot ${i === step ? 'on' : i < step ? 'dn' : ''}"></div>`
+  ).join('');
+
+  let opts = q.opts.map((o, i) =>
+    `<button class="qo" onclick="pick('${q.id}', ${i})">${o}</button>`
+  ).join('');
+
+  el.innerHTML = `
+    <div class="sl">Before we begin</div>
+    <h2>Four quick questions</h2>
+    <p class="qsub">So I know where to start with you.</p>
+    <div class="fade-in">
+      <div class="dots">${dots}</div>
+      <div class="qq">${q.q}</div>
+      ${opts}
+    </div>
+  `;
+}
+
+function pick(id, idx) {
+  answers[id] = QUIZ.find(q => q.id === id).opts[idx];
+  const btns = el.querySelectorAll('.qo');
+  btns[idx].classList.add('sel');
+  step++;
+  setTimeout(renderQuestion, 350);
+}
+
+function renderContactForm() {
+  el.innerHTML = `
+    <div class="fade-in">
+      <div class="qq">Almost there — how can I reach you?</div>
+      <label class="inp-label">Your name</label>
+      <input class="inp" type="text" id="field-name" placeholder="e.g. Anna">
+      <label class="inp-label">Your email</label>
+      <input class="inp" type="email" id="field-email" placeholder="e.g. anna@example.com">
+      <div id="contact-err" class="err-msg">Please enter your name and a valid email.</div>
+      <button class="sb" onclick="goToOpenField()" style="margin-top:12px">Continue →</button>
+    </div>
+  `;
+}
+
+function goToOpenField() {
+  var name = document.getElementById('field-name').value.trim();
+  var email = document.getElementById('field-email').value.trim();
+  if (!name || !email || !email.includes('@')) {
+    document.getElementById('contact-err').style.display = 'block';
+    return;
+  }
+  answers.name = name;
+  answers.email = email;
+  renderOpenField();
+}
+
+function renderOpenField() {
+  el.innerHTML = `
+    <div class="fade-in">
+      <div class="qq">One last thing — in your own words</div>
+      <p class="ta-hint">Where in your life would you most want support? What's the thing you keep meaning to sort out but never get to? There's no wrong answer — this helps me understand what matters to you.</p>
+      <textarea class="ta" id="open-field" placeholder="For example: I have 5 years of blood tests from 3 different doctors and no idea what they mean together..."></textarea>
+      <button class="sb" onclick="submitAll()">Send & join →</button>
+      <div style="margin-top:12px"><button class="sb" style="background:transparent;color:#8a8478;font-size:13px;padding:10px 20px" onclick="submitAll()">Skip — I'd rather talk about it on a call</button></div>
+    </div>
+  `;
+}
+
+function submitAll() {
+  var field = document.getElementById('open-field');
+  answers.open_response = field ? field.value : '';
+
+  var data = {
+    name: answers.name || '',
+    email: answers.email || '',
+    start: answers.start || '',
+    ai: answers.ai || '',
+    hope: answers.hope || '',
+    build_first: answers.build_first || '',
+    open_response: answers.open_response || '',
+    timestamp: new Date().toISOString(),
+    ref: window.location.search
+  };
+
+  if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL') {
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).catch(function() {});
+  }
+
+  renderThankYou();
+}
+
+function renderThankYou() {
+  el.innerHTML = `
+    <div class="ty fade-in">
+      <h2>You're in 🌅</h2>
+      <p>Thank you. I'll reach out to schedule our first conversation — a relaxed call where we'll talk about what resonates and what you'd want to explore together.</p>
+      <div class="sig">— Natasha</div>
+    </div>
+  `;
+}
+
+renderIntro();
+</script>
+
+</body>
+</html>
