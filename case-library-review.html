@@ -260,8 +260,7 @@
     .tag.later, .tag.narrow { background: #f4f4f4; color: #707070; border-color: #e1e1e1; }
 
     .controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      display: flex;
       gap: 8px;
       align-items: center;
       border-top: 1px solid var(--line);
@@ -283,10 +282,10 @@
       accent-color: var(--sage-dark);
     }
 
-    .priority {
-      border-radius: 10px;
-      padding: 8px;
-      background: #fbfaf7;
+    .vote-count {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 12px;
     }
 
     textarea {
@@ -343,7 +342,7 @@
     <div class="wrap">
       <h1>Aurora Journey Case Library Review</h1>
       <div class="subtitle">
-        Интерактивная доска для отбора 21 Journey-карточки. По умолчанию первыми идут твои / Aurora-originated кейсы, Reddit и внешние истории ниже. Все отметки сохраняются локально в браузере.
+        Vote for up to 21 Journey cards and leave comments on any case. By default, Aurora-originated cases come first; Reddit and external inspiration sit lower. Your draft is saved locally until you submit.
       </div>
       <div class="toolbar">
         <input id="search" type="search" placeholder="Search case, cluster, source, description...">
@@ -370,9 +369,9 @@
         </select>
         <select id="viewFilter">
           <option value="all">All cards</option>
-          <option value="in21">Marked In 21</option>
-          <option value="designer">Marked To designer</option>
-          <option value="priorityA">Priority A</option>
+          <option value="in21">Voted cards</option>
+          <option value="designer">Has comment</option>
+          <option value="priorityA">Voted or commented</option>
           <option value="unmarked">Unmarked</option>
         </select>
       </div>
@@ -382,14 +381,14 @@
 
   <main class="wrap">
     <div class="help">
-      Suggested workflow: first mark `In 21`, then set priority `A/B/C/Later`, then mark `To designer` only for cards that need immediate visual work. Add comments or new case ideas below, then submit your review.
+      Suggested workflow: choose up to 21 cards, add comments where useful, add any missing case ideas below, then submit your votes.
       <div class="review-form">
         <input id="reviewerName" class="inp" type="text" placeholder="Your name">
         <input id="reviewerEmail" class="inp" type="email" placeholder="Email (optional)">
         <textarea id="newCases" placeholder="New case ideas / general comments / what is missing..."></textarea>
       </div>
       <div class="submit-row">
-        <button id="submitReviewBtn" class="primary" type="button">Submit review</button>
+        <button id="submitReviewBtn" class="primary" type="button">Submit my votes</button>
         <span id="submitStatus" class="submit-status"></span>
       </div>
       <button id="exportBtn" type="button">Export marked TSV</button>
@@ -1672,14 +1671,18 @@
     }
 
     function caseState(id) {
-      if (!state[id]) state[id] = { in21: false, designer: false, priority: "", notes: "" };
+      if (!state[id]) state[id] = { in21: false, notes: "" };
       return state[id];
     }
 
     function markedCases() {
       return cases
         .map(card => ({ card, review: caseState(card.id) }))
-        .filter(({ review }) => review.in21 || review.designer || review.priority || review.notes);
+        .filter(({ review }) => review.in21 || review.notes);
+    }
+
+    function selectedCount() {
+      return cases.filter(c => caseState(c.id).in21).length;
     }
 
     function riskClass(risk) {
@@ -1698,9 +1701,9 @@
       if (fitFilter.value !== "all" && card.fit !== fitFilter.value) return false;
       if (riskFilter.value !== "all" && !card.risk.includes(riskFilter.value)) return false;
       if (viewFilter.value === "in21" && !st.in21) return false;
-      if (viewFilter.value === "designer" && !st.designer) return false;
-      if (viewFilter.value === "priorityA" && st.priority !== "A") return false;
-      if (viewFilter.value === "unmarked" && (st.in21 || st.designer || st.priority || st.notes)) return false;
+      if (viewFilter.value === "designer" && !st.notes) return false;
+      if (viewFilter.value === "priorityA" && !(st.in21 || st.notes)) return false;
+      if (viewFilter.value === "unmarked" && (st.in21 || st.notes)) return false;
       return true;
     }
 
@@ -1749,18 +1752,10 @@
           </div>
           <div class="source">Source: ${escapeHtml(card.source)}</div>
           <div class="controls">
-            <label class="check"><input type="checkbox" data-field="in21" ${st.in21 ? "checked" : ""}> In 21</label>
-            <label class="check"><input type="checkbox" data-field="designer" ${st.designer ? "checked" : ""}> To designer</label>
-            <select class="priority" data-field="priority">
-              <option value="" ${st.priority === "" ? "selected" : ""}>Priority</option>
-              <option value="A" ${st.priority === "A" ? "selected" : ""}>A</option>
-              <option value="B" ${st.priority === "B" ? "selected" : ""}>B</option>
-              <option value="C" ${st.priority === "C" ? "selected" : ""}>C</option>
-              <option value="Later" ${st.priority === "Later" ? "selected" : ""}>Later</option>
-              <option value="No" ${st.priority === "No" ? "selected" : ""}>No</option>
-            </select>
+            <label class="check"><input type="checkbox" data-field="in21" ${st.in21 ? "checked" : ""}> Vote for 21</label>
+            <span class="vote-count">${selectedCount()} / 21 selected</span>
           </div>
-          <textarea data-field="notes" placeholder="Notes / decision / rewrite title...">${escapeHtml(st.notes || "")}</textarea>
+          <textarea data-field="notes" placeholder="Comment on this card...">${escapeHtml(st.notes || "")}</textarea>
         </article>
       `;
     }
@@ -1771,13 +1766,14 @@
         const st = caseState(id);
         cardEl.querySelectorAll("input[type='checkbox']").forEach(input => {
           input.addEventListener("change", () => {
+            if (input.dataset.field === "in21" && input.checked && selectedCount() >= 21) {
+              input.checked = false;
+              alert("You can vote for up to 21 cards.");
+              return;
+            }
             st[input.dataset.field] = input.checked;
             saveState();
           });
-        });
-        cardEl.querySelector("select[data-field='priority']").addEventListener("change", event => {
-          st.priority = event.target.value;
-          saveState();
         });
         cardEl.querySelector("textarea[data-field='notes']").addEventListener("input", event => {
           st.notes = event.target.value;
@@ -1790,8 +1786,7 @@
     function renderStats(visibleCount) {
       const all = cases.length;
       const in21 = cases.filter(c => caseState(c.id).in21).length;
-      const designer = cases.filter(c => caseState(c.id).designer).length;
-      const a = cases.filter(c => caseState(c.id).priority === "A").length;
+      const comments = cases.filter(c => caseState(c.id).notes).length;
       const own = cases.filter(c => c.origin === "own").length;
       const reddit = cases.filter(c => c.origin === "reddit").length;
       stats.innerHTML = `
@@ -1799,10 +1794,10 @@
         <span class="pill">Total: ${all}</span>
         <span class="pill">My/Aurora: ${own}</span>
         <span class="pill">Reddit: ${reddit}</span>
-        <span class="pill">Marked In 21: ${in21}</span>
-        <span class="pill">To designer: ${designer}</span>
-        <span class="pill">Priority A: ${a}</span>
+        <span class="pill">Votes: ${in21} / 21</span>
+        <span class="pill">Comments: ${comments}</span>
       `;
+      document.getElementById("submitReviewBtn").disabled = in21 > 21;
     }
 
     function escapeHtml(value) {
@@ -1815,14 +1810,12 @@
     }
 
     function exportMarked() {
-      const rows = [["ID", "In 21", "To designer", "Priority", "Origin", "Cluster", "Case", "Fit", "Risk", "Source", "Notes"]];
+      const rows = [["ID", "Vote", "Origin", "Cluster", "Case", "Fit", "Risk", "Source", "Comment"]];
       markedCases().forEach(({ card, review: st }) => {
-        if (st.in21 || st.designer || st.priority || st.notes) {
+        if (st.in21 || st.notes) {
           rows.push([
             card.id,
             st.in21 ? "yes" : "",
-            st.designer ? "yes" : "",
-            st.priority,
             card.origin,
             card.cluster,
             card.title,
@@ -1857,23 +1850,28 @@
         fit: card.fit,
         risk: card.risk,
         source: card.source,
-        in21: !!review.in21,
-        toDesigner: !!review.designer,
-        priority: review.priority || "",
-        notes: review.notes || ""
+        vote: !!review.in21,
+        comment: review.notes || ""
       }));
+
+      const votes = marked.filter(c => c.vote);
+      if (votes.length > 21) {
+        submitStatus.textContent = "Please choose no more than 21 cards.";
+        return;
+      }
 
       const payload = {
         timestamp: new Date().toISOString(),
         name,
         email: reviewerEmail.value.trim(),
         start: "case_library_review",
-        ai: "review_board",
-        hope: `Marked In 21: ${marked.filter(c => c.in21).length}; To designer: ${marked.filter(c => c.toDesigner).length}; Priority A: ${marked.filter(c => c.priority === "A").length}`,
-        build_first: marked.filter(c => c.in21).map(c => `${c.id}: ${c.title}`).join("; "),
+        ai: "vote_up_to_21",
+        hope: `Votes: ${votes.length}; Comments: ${marked.filter(c => c.comment).length}`,
+        build_first: votes.map(c => `${c.id}: ${c.title}`).join("; "),
         open_response: JSON.stringify({
           reviewer: { name, email: reviewerEmail.value.trim() },
           newCases: newCases.value.trim(),
+          voteLimit: 21,
           marked
         }),
         ref: window.location.href
