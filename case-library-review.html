@@ -1,0 +1,1916 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aurora Journey Case Library Review</title>
+  <style>
+    :root {
+      --bg: #f8f4ee;
+      --panel: #fffaf3;
+      --card: #ffffff;
+      --ink: #182238;
+      --muted: #6f7583;
+      --line: #e8ded0;
+      --sage: #7f9b8c;
+      --sage-dark: #4f7463;
+      --peach: #f0b997;
+      --blue: #7893b2;
+      --red: #b76b62;
+      --yellow: #b58b35;
+      --green: #4f875c;
+      --shadow: 0 14px 40px rgba(35, 28, 20, 0.08);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at top left, #fff7e8, var(--bg), #f2efe8);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      backdrop-filter: blur(18px);
+      background: rgba(248, 244, 238, 0.88);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 22px 28px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      max-width: 980px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(260px, 1.5fr) repeat(4, minmax(140px, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    input, select, button, textarea {
+      font: inherit;
+    }
+
+    input[type="search"], select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: var(--ink);
+      outline: none;
+    }
+
+    input[type="search"]:focus, select:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(127, 155, 140, 0.18);
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+      color: var(--ink);
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: var(--sage);
+      background: #fbf8f2;
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.74);
+      border-radius: 999px;
+      padding: 5px 9px;
+      white-space: nowrap;
+    }
+
+    main.wrap {
+      padding-top: 18px;
+    }
+
+    .help {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .review-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(160px, 1fr));
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .review-form textarea {
+      grid-column: 1 / -1;
+      min-height: 76px;
+    }
+
+    .submit-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .primary {
+      background: var(--ink);
+      color: #fffaf3;
+      border-color: var(--ink);
+    }
+
+    .primary:hover {
+      background: #2e3a52;
+      border-color: #2e3a52;
+    }
+
+    .submit-status {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .case-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 360px;
+    }
+
+    .case-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .id {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 3px 0 0;
+      font-size: 20px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .cluster {
+      font-size: 12px;
+      color: var(--sage-dark);
+      font-weight: 650;
+      text-align: right;
+      min-width: 100px;
+    }
+
+    .desc {
+      color: #303848;
+      font-size: 14px;
+    }
+
+    .why {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto;
+    }
+
+    .tag {
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 12px;
+      background: #f4f0e8;
+      color: #4c5361;
+      border: 1px solid var(--line);
+    }
+
+    .tag.own { background: #edf5ef; color: var(--green); border-color: #d5e5d8; }
+    .tag.reddit { background: #eef3fa; color: #486d9a; border-color: #d7e3f1; }
+    .tag.support { background: #f6f0fb; color: #76599b; border-color: #eadcf5; }
+    .tag.red { background: #fbefed; color: var(--red); border-color: #efd7d4; }
+    .tag.yellow { background: #fbf5e7; color: var(--yellow); border-color: #f0e3c2; }
+    .tag.green { background: #edf6ee; color: var(--green); border-color: #d8eadb; }
+    .tag.strong { background: #edf6ee; color: var(--green); border-color: #d8eadb; }
+    .tag.maybe { background: #f8f1e3; color: var(--yellow); border-color: #ead8b4; }
+    .tag.later, .tag.narrow { background: #f4f4f4; color: #707070; border-color: #e1e1e1; }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+
+    label.check {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      color: #323b4c;
+      cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--sage-dark);
+    }
+
+    .priority {
+      border-radius: 10px;
+      padding: 8px;
+      background: #fbfaf7;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 54px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 9px 10px;
+      color: var(--ink);
+      background: #fffdf9;
+      outline: none;
+      font-size: 13px;
+    }
+
+    .source {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .empty {
+      display: none;
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    @media (max-width: 980px) {
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .wrap {
+        padding: 18px;
+      }
+
+      .toolbar, .grid, .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .review-form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Aurora Journey Case Library Review</h1>
+      <div class="subtitle">
+        Интерактивная доска для отбора 21 Journey-карточки. По умолчанию первыми идут твои / Aurora-originated кейсы, Reddit и внешние истории ниже. Все отметки сохраняются локально в браузере.
+      </div>
+      <div class="toolbar">
+        <input id="search" type="search" placeholder="Search case, cluster, source, description...">
+        <select id="originFilter">
+          <option value="all">All origins</option>
+          <option value="own">My / Aurora cases first</option>
+          <option value="reddit">Reddit only</option>
+          <option value="support">Support / educational only</option>
+        </select>
+        <select id="fitFilter">
+          <option value="all">All fit levels</option>
+          <option value="strong">strong</option>
+          <option value="maybe">maybe</option>
+          <option value="later">later</option>
+          <option value="narrow">narrow</option>
+          <option value="educational">educational</option>
+          <option value="support">support</option>
+        </select>
+        <select id="riskFilter">
+          <option value="all">All risks</option>
+          <option value="green">green</option>
+          <option value="yellow">yellow</option>
+          <option value="red">red</option>
+        </select>
+        <select id="viewFilter">
+          <option value="all">All cards</option>
+          <option value="in21">Marked In 21</option>
+          <option value="designer">Marked To designer</option>
+          <option value="priorityA">Priority A</option>
+          <option value="unmarked">Unmarked</option>
+        </select>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="help">
+      Suggested workflow: first mark `In 21`, then set priority `A/B/C/Later`, then mark `To designer` only for cards that need immediate visual work. Add comments or new case ideas below, then submit your review.
+      <div class="review-form">
+        <input id="reviewerName" class="inp" type="text" placeholder="Your name">
+        <input id="reviewerEmail" class="inp" type="email" placeholder="Email (optional)">
+        <textarea id="newCases" placeholder="New case ideas / general comments / what is missing..."></textarea>
+      </div>
+      <div class="submit-row">
+        <button id="submitReviewBtn" class="primary" type="button">Submit review</button>
+        <span id="submitStatus" class="submit-status"></span>
+      </div>
+      <button id="exportBtn" type="button">Export marked TSV</button>
+      <button id="resetFiltersBtn" type="button">Reset filters</button>
+    </div>
+    <div id="grid" class="grid"></div>
+    <div id="empty" class="empty">No cases match the current filters.</div>
+  </main>
+
+  <script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyFQ93BM5JirNI0MrkpCYRBN4UJyjk0v7y-pSpS5fErb7rOq0etkb3JdT0zh7cPSpQ/exec';
+
+    const cases = [
+      {
+        id: "H001",
+        origin: "own",
+        cluster: "Household money leaks",
+        title: "Insurance Renewal Check",
+        description: "Before auto-renewal, compare this year against last year, see premium and coverage changes, and prepare broker questions.",
+        why: "Strong Founder-Market Fit: big-ticket, recurring, household money, clear compare-before-you-pay behavior.",
+        fit: "strong",
+        tools: "Gmail, Camera, ChatGPT, Sheets",
+        risk: "yellow",
+        source: "Downloads household / designer-ready"
+      },
+      {
+        id: "H002",
+        origin: "own",
+        cluster: "Household money leaks",
+        title: "Medical Bill Sanity Check",
+        description: "Translate a medical bill and EOB into plain English, identify what to question, and prepare one calm billing call before paying.",
+        why: "Very American pain point; high emotional relief and meaningful money clarity.",
+        fit: "strong",
+        tools: "Camera, Gmail, ChatGPT, Notes",
+        risk: "red",
+        source: "Downloads household / designer-ready"
+      },
+      {
+        id: "H007",
+        origin: "own",
+        cluster: "Shopping / recovery",
+        title: "Warranty & Refund Rescue",
+        description: "Find whether a product still qualifies for return, price adjustment, warranty, or credit-card protection, then draft one clear message.",
+        why: "Fast win, visually friendly, satisfying money-back feeling.",
+        fit: "strong",
+        tools: "Gmail, Camera, ChatGPT, Browser",
+        risk: "yellow",
+        source: "Downloads household / designer-ready"
+      },
+      {
+        id: "H005",
+        origin: "own",
+        cluster: "Home / utilities",
+        title: "Utility Bill Spike Detective",
+        description: "Compare this month and last month, explain likely reasons for a bill jump, and choose three low-effort fixes to test.",
+        why: "Monthly relevance, easy visual metaphor, practical but not shame-based.",
+        fit: "strong",
+        tools: "Camera, Gmail, ChatGPT, Sheets",
+        risk: "yellow",
+        source: "Downloads household / designer-ready"
+      },
+      {
+        id: "H009",
+        origin: "own",
+        cluster: "Food / money",
+        title: "Takeout Rescue Plan",
+        description: "Turn the 6:15 pm tired-night dinner panic into three backup meals and one emergency grocery list.",
+        why: "Warm everyday savings; broad, low-risk, emotionally relatable.",
+        fit: "strong",
+        tools: "ChatGPT, Notes, Camera, Calendar",
+        risk: "green/yellow",
+        source: "Downloads household / designer-ready"
+      },
+      {
+        id: "M001",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Before You Reply",
+        description: "A 60-second AI reality check before replying, clicking, paying, sharing a code, sending documents, or keeping a secret.",
+        why: "High strategic value: teaches a protective pause without becoming a fraud product.",
+        fit: "strong",
+        tools: "ChatGPT, Claude, Gemini, Camera",
+        risk: "red",
+        source: "Message reality / designer-ready"
+      },
+      {
+        id: "C001",
+        origin: "own",
+        cluster: "Camera / admin",
+        title: "Letter: what is this?",
+        description: "Photo of a physical letter becomes a plain-language summary: who sent it, whether action is needed, and by when.",
+        why: "The simplest first-card behavior: phone camera plus useful answer in minutes.",
+        fit: "strong",
+        tools: "Camera, ChatGPT",
+        risk: "green",
+        source: "Core curriculum"
+      },
+      {
+        id: "C002",
+        origin: "own",
+        cluster: "Home / health",
+        title: "Medicine cabinet inventory",
+        description: "Photos of the medicine shelf become an inventory: what exists, what expired, what is missing, and what to restock.",
+        why: "Physical order, visible result, existing prototype candidate.",
+        fit: "strong",
+        tools: "Camera, ChatGPT, Notes",
+        risk: "green/yellow",
+        source: "Core curriculum / journey card spec"
+      },
+      {
+        id: "C003",
+        origin: "own",
+        cluster: "Smart shopping",
+        title: "Receipts to grocery savings",
+        description: "Weekly receipt photos become category totals, pricey items, patterns, and realistic savings ideas.",
+        why: "Direct Edadeal DNA and a natural first smart-shopping card.",
+        fit: "strong",
+        tools: "Camera, ChatGPT, Sheets",
+        risk: "yellow",
+        source: "Core curriculum / smart shopping"
+      },
+      {
+        id: "S001",
+        origin: "own",
+        cluster: "Smart shopping",
+        title: "Basket comparison",
+        description: "Map a regular grocery basket once, then compare the same basket across stores, unit prices, pack sizes, and loyalty prices.",
+        why: "Signature smart-shopping expertise; strongest Founder-Market Fit signal.",
+        fit: "strong",
+        tools: "ChatGPT, Sheets, grocery apps",
+        risk: "yellow",
+        source: "Downloads smart shopping"
+      },
+      {
+        id: "S004",
+        origin: "own",
+        cluster: "Smart shopping",
+        title: "Did the deal really apply?",
+        description: "Compare receipt, shelf tag, and coupon to see whether sale prices, points, and loyalty discounts actually applied.",
+        why: "Concrete, low-friction, satisfying; catches real checkout mistakes.",
+        fit: "strong",
+        tools: "Camera, ChatGPT, Notes",
+        risk: "yellow",
+        source: "Downloads smart shopping"
+      },
+      {
+        id: "S006",
+        origin: "own",
+        cluster: "Food / savings",
+        title: "Pantry before shopping",
+        description: "Photos of pantry and fridge become meal ideas from what is already at home plus a list of only missing items.",
+        why: "Bridges grocery savings and daily meal planning without shame.",
+        fit: "strong",
+        tools: "Camera, ChatGPT, Notes",
+        risk: "green/yellow",
+        source: "Downloads smart shopping"
+      },
+      {
+        id: "C005",
+        origin: "own",
+        cluster: "Kids / school",
+        title: "School papers to quizzes",
+        description: "Backpack papers become homework summary, due dates, topics, and custom quizzes for spelling or revision.",
+        why: "Very tangible for family mental load; child-facing payoff.",
+        fit: "strong",
+        tools: "Camera, ChatGPT, Drive",
+        risk: "green/yellow",
+        source: "Core curriculum"
+      },
+      {
+        id: "C007",
+        origin: "own",
+        cluster: "Voice / planning",
+        title: "Voice dump to plan and reminders",
+        description: "A messy voice note becomes tasks, reminders, deadlines, and notes without needing to type or organize first.",
+        why: "Core behavior for busy women: get it out of the head before it disappears.",
+        fit: "strong",
+        tools: "Voice, ChatGPT, Notes",
+        risk: "green/yellow",
+        source: "Core curriculum"
+      },
+      {
+        id: "C008",
+        origin: "own",
+        cluster: "Home / memory",
+        title: "Where is my stuff?",
+        description: "Walk around the house and tell AI where things live; later ask where glue, batteries, school socks, or spare cables are.",
+        why: "Turns household memory into a searchable system; strong everyday magic.",
+        fit: "strong",
+        tools: "Voice, Camera, ChatGPT",
+        risk: "green",
+        source: "Core curriculum / family 2023"
+      },
+      {
+        id: "C009",
+        origin: "own",
+        cluster: "Health / documents",
+        title: "Blood tests timeline",
+        description: "Years of lab PDFs become one longitudinal timeline with trends and questions for the doctor.",
+        why: "Deep differentiation: AI as health-history organizer, not medical oracle.",
+        fit: "strong",
+        tools: "PDF upload, ChatGPT/Claude",
+        risk: "red",
+        source: "Core curriculum / household / Reddit"
+      },
+      {
+        id: "C010",
+        origin: "own",
+        cluster: "Shopping / documents",
+        title: "Online order PDFs to savings",
+        description: "Order confirmations reveal repeat buys, impulse patterns, subscriptions, returns, and cheaper alternatives.",
+        why: "Strong money-leak case, especially for US household order volume.",
+        fit: "strong",
+        tools: "Gmail, PDFs, ChatGPT, Sheets",
+        risk: "yellow",
+        source: "Core curriculum"
+      },
+      {
+        id: "C012",
+        origin: "own",
+        cluster: "Communication",
+        title: "Teacher letter iteration",
+        description: "A delicate school email becomes a firm, warm, evidence-based draft through several AI revision rounds.",
+        why: "Teaches an AI skill: first answer is draft, best answer comes through iteration.",
+        fit: "strong",
+        tools: "ChatGPT",
+        risk: "green/yellow",
+        source: "Core curriculum"
+      },
+      {
+        id: "C013",
+        origin: "own",
+        cluster: "Money / negotiation",
+        title: "Subscription negotiator",
+        description: "Describe a cancellation or contract conflict; AI maps the argument and drafts a firm but non-hostile message.",
+        why: "Real savings, clear before/after, and good agency signal.",
+        fit: "strong",
+        tools: "ChatGPT, documents",
+        risk: "yellow",
+        source: "Core curriculum / household"
+      },
+      {
+        id: "C014",
+        origin: "own",
+        cluster: "Smart shopping",
+        title: "Coupons from email",
+        description: "Promo emails become one list of active offers, expiry dates, stores, useful reminders, and actual savings.",
+        why: "Classic smart-shopping entry: familiar, practical, low-friction.",
+        fit: "strong",
+        tools: "Gmail, ChatGPT, Notes",
+        risk: "green/yellow",
+        source: "Core curriculum / downloads"
+      },
+      {
+        id: "C019",
+        origin: "own",
+        cluster: "School / inbox",
+        title: "School email summary",
+        description: "School emails become one weekly action list: forms, payments, dates, bookings, and what is just FYI.",
+        why: "Very strong mental-load case; high privacy/access weight.",
+        fit: "strong",
+        tools: "Gmail, ChatGPT/Claude",
+        risk: "red",
+        source: "Core curriculum / family 2023"
+      },
+      {
+        id: "S002",
+        origin: "own",
+        cluster: "Money leaks",
+        title: "Subscriptions and zombie charges",
+        description: "Bank or statement review finds recurring charges, forgotten trials, duplicate services, and annual renewals.",
+        why: "Real money leakage and strong story, but sensitive financial data.",
+        fit: "strong",
+        tools: "Bank CSV, ChatGPT, Sheets",
+        risk: "red",
+        source: "Smart shopping / household examples"
+      },
+      {
+        id: "S003",
+        origin: "own",
+        cluster: "Shopping / orders",
+        title: "Repeat buys and online order leaks",
+        description: "Order history becomes a timeline of duplicate purchases, impulse buys, stress shopping, and repeat essentials.",
+        why: "Very relatable for Amazon/Target/Walmart-style households.",
+        fit: "strong",
+        tools: "Gmail, ChatGPT, Sheets",
+        risk: "yellow",
+        source: "Downloads smart shopping"
+      },
+      {
+        id: "S005",
+        origin: "own",
+        cluster: "Grocery",
+        title: "Private-label swaps",
+        description: "AI suggests a few store-brand twins from receipts or shopping lists without changing the whole household lifestyle.",
+        why: "Good savings card if framed as choice, not deprivation.",
+        fit: "strong",
+        tools: "Camera, ChatGPT, Sheets",
+        risk: "yellow",
+        source: "Downloads smart shopping"
+      },
+      {
+        id: "H006",
+        origin: "own",
+        cluster: "Home / purchases",
+        title: "Repair or Replace Decision",
+        description: "Model number, age, repair estimate, and replacement cost become one sensible repair-or-replace recommendation.",
+        why: "Prevents panic purchases; common household spending dilemma.",
+        fit: "strong",
+        tools: "Camera, Search, ChatGPT, Notes",
+        risk: "green/yellow",
+        source: "Downloads household"
+      },
+      {
+        id: "M006",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Phishing or fake bank/tax message",
+        description: "A suspicious bank, tax, delivery, or payment message gets checked for fake links, code requests, and urgency tactics.",
+        why: "Simpler, more concrete version of Before You Reply; very practical.",
+        fit: "strong",
+        tools: "Messages, Gmail, ChatGPT",
+        risk: "yellow/red",
+        source: "Message reality"
+      },
+      {
+        id: "M010",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Marketplace buyer/seller scam",
+        description: "Marketplace chat gets checked for off-platform payment, fake screenshots, overpayment, courier fee, and verification-code traps.",
+        why: "Very cardable digital safety case; practical, not too emotionally heavy.",
+        fit: "strong",
+        tools: "Marketplace chat, ChatGPT",
+        risk: "yellow",
+        source: "Message reality"
+      },
+      {
+        id: "M011",
+        origin: "own",
+        cluster: "Communication",
+        title: "Manipulative work message",
+        description: "A tense work message gets separated into facts, requests, pressure, assumptions, and a calm boundary reply.",
+        why: "Agency card beyond scams; useful and emotionally intelligent.",
+        fit: "strong",
+        tools: "ChatGPT/Claude",
+        risk: "green/yellow",
+        source: "Message reality"
+      },
+      {
+        id: "M015",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "They told me not to tell anyone",
+        description: "A secrecy request becomes a trigger to get a second pair of eyes and tell one trusted person before acting.",
+        why: "Powerful copy, but likely belongs inside Before You Reply rather than as a separate card.",
+        fit: "strong",
+        tools: "ChatGPT/Claude",
+        risk: "red",
+        source: "Message reality"
+      },
+      {
+        id: "M017",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Private shame check",
+        description: "If a message feels too embarrassing to show a person, use AI first to move from shame to one protective action.",
+        why: "Strong emotional insight; maybe umbrella language for Before You Reply.",
+        fit: "strong",
+        tools: "ChatGPT/Claude",
+        risk: "red",
+        source: "Message reality"
+      },
+      {
+        id: "F003",
+        origin: "own",
+        cluster: "Parent chats",
+        title: "Parent chat digest",
+        description: "Class WhatsApp or Telegram chats become executive summary plus alerts when action is required.",
+        why: "High-value real family pain, but requires access/privacy and is more app-like.",
+        fit: "strong",
+        tools: "WhatsApp/Telegram, AI",
+        risk: "red",
+        source: "Family 2023"
+      },
+      {
+        id: "F015",
+        origin: "own",
+        cluster: "Home improvement",
+        title: "Document faults and contractors",
+        description: "Photos of a home problem become documentation, landlord letter, contractor questions, and repair comparison.",
+        why: "Strong home-admin card, overlaps with mold/leak case.",
+        fit: "strong",
+        tools: "Camera, ChatGPT, Search",
+        risk: "yellow",
+        source: "Family 2023 / Reddit"
+      },
+      {
+        id: "C004",
+        origin: "own",
+        cluster: "Style / self",
+        title: "Wardrobe to style formulas",
+        description: "Closet photos and personal context become keep/replace decisions, palette, outfit formulas, and a targeted shopping list.",
+        why: "Emotionally strong founder case; less central to money wedge.",
+        fit: "maybe",
+        tools: "Camera, ChatGPT",
+        risk: "green",
+        source: "Core curriculum / household"
+      },
+      {
+        id: "C006",
+        origin: "own",
+        cluster: "Home / garden",
+        title: "Garden map and care plan",
+        description: "Garden photos become a plant map, what to do this month, and a seasonal care rhythm.",
+        why: "Beautiful visual card, but seasonal and less universal.",
+        fit: "maybe",
+        tools: "Camera, ChatGPT",
+        risk: "green",
+        source: "Core curriculum"
+      },
+      {
+        id: "C011",
+        origin: "own",
+        cluster: "Culture / leisure",
+        title: "Movie and weekly newspaper curator",
+        description: "AI learns taste and creates a weekly ritual: what to watch, read, or listen to this weekend.",
+        why: "Good anti-hustle tone card; weaker household ROI.",
+        fit: "maybe",
+        tools: "ChatGPT, streaming/search",
+        risk: "green",
+        source: "Core curriculum"
+      },
+      {
+        id: "C016",
+        origin: "own",
+        cluster: "Home / system",
+        title: "Medicine cabinet in Google Sheets",
+        description: "The medicine inventory becomes a living sheet with expiry formulas and reminders.",
+        why: "Good progression card, but depends on medicine cabinet inventory.",
+        fit: "maybe",
+        tools: "ChatGPT, Sheets, Calendar",
+        risk: "green/yellow",
+        source: "Core curriculum"
+      },
+      {
+        id: "C018",
+        origin: "own",
+        cluster: "Learning / audio",
+        title: "NotebookLM podcast",
+        description: "Saved articles or notes become a short audio overview for school run, walk, or commute.",
+        why: "Nice demonstration of AI as companion, but may not be first 21.",
+        fit: "maybe",
+        tools: "NotebookLM, docs",
+        risk: "green/yellow",
+        source: "Core curriculum / Reddit"
+      },
+      {
+        id: "C020",
+        origin: "own",
+        cluster: "Culture / planning",
+        title: "Theater tickets combinatorics",
+        description: "Family availability, tastes, age constraints, and budget become a shortlist of suitable shows.",
+        why: "Great combinatorics demo; somewhat niche.",
+        fit: "maybe",
+        tools: "ChatGPT, Calendar, Search",
+        risk: "yellow",
+        source: "Core curriculum / family 2023"
+      },
+      {
+        id: "C021",
+        origin: "own",
+        cluster: "Reflection / system",
+        title: "Weekly review",
+        description: "Weekly notes, tasks, and files become a calm summary of what happened, what is open, and next priorities.",
+        why: "Important meta-ritual, but less visual and less first-step.",
+        fit: "maybe",
+        tools: "ChatGPT/Claude, files",
+        risk: "yellow",
+        source: "Core curriculum"
+      },
+      {
+        id: "C022",
+        origin: "own",
+        cluster: "Community",
+        title: "Create a card for a friend",
+        description: "Turn one successful personal recipe into a clean shareable card for another woman.",
+        why: "Good finale if Journey is educational/community-oriented.",
+        fit: "maybe",
+        tools: "ChatGPT",
+        risk: "green",
+        source: "Core curriculum"
+      },
+      {
+        id: "S007",
+        origin: "own",
+        cluster: "Money clarity",
+        title: "Expensive week comparison",
+        description: "Compare two weeks of receipts or totals to explain why one week felt unusually expensive.",
+        why: "Useful, but overlaps with receipts and grocery savings.",
+        fit: "maybe",
+        tools: "Receipts, ChatGPT, Sheets",
+        risk: "yellow",
+        source: "Downloads smart shopping"
+      },
+      {
+        id: "S008",
+        origin: "own",
+        cluster: "School / money",
+        title: "School payments and forgotten fees",
+        description: "School emails reveal upcoming payments, forms, trips, lunch balances, and missed deadlines.",
+        why: "Strong pain, but overlaps with school email summary.",
+        fit: "strong",
+        tools: "Gmail, ChatGPT, Calendar",
+        risk: "red",
+        source: "Downloads smart shopping / family 2023"
+      },
+      {
+        id: "H003",
+        origin: "own",
+        cluster: "Household money leaks",
+        title: "Prescription Price Check",
+        description: "Compare pharmacy prices, coupon price, insurance copay, pickup distance, and refill reminders.",
+        why: "Good US money case, but health-adjacent and more regulated.",
+        fit: "maybe",
+        tools: "Camera, GoodRx, ChatGPT, Maps",
+        risk: "yellow/red",
+        source: "Downloads household"
+      },
+      {
+        id: "H004",
+        origin: "own",
+        cluster: "Home / money",
+        title: "Property Tax Appeal Helper",
+        description: "Assessment letter, comparable homes, and deadlines become a decision on whether appeal is worth it.",
+        why: "Potentially valuable but homeowner-specific and bureaucratic.",
+        fit: "maybe",
+        tools: "Camera, ChatGPT, Sheets, county site",
+        risk: "yellow",
+        source: "Downloads household"
+      },
+      {
+        id: "H008",
+        origin: "own",
+        cluster: "Money / lifestyle",
+        title: "Membership Worth-It Check",
+        description: "Annual membership fee gets compared with actual perks, household use, savings, and renewal date.",
+        why: "Practical but less emotionally sharp than insurance/refunds.",
+        fit: "maybe",
+        tools: "Gmail, ChatGPT, Sheets, Calendar",
+        risk: "yellow",
+        source: "Downloads household"
+      },
+      {
+        id: "H010",
+        origin: "own",
+        cluster: "Community / savings",
+        title: "Borrow Before You Buy",
+        description: "Draft a warm neighborhood ask before buying an item you only need once.",
+        why: "Warm, social, low-cost, but less AI-specific.",
+        fit: "maybe",
+        tools: "ChatGPT, Notes, Facebook Groups",
+        risk: "green/yellow",
+        source: "Downloads household"
+      },
+      {
+        id: "M007",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Account takeover triage",
+        description: "A suspicious login alert or screenshot becomes a clear next-10-minutes action plan.",
+        why: "Practical and personal, but security red-data and can be intense.",
+        fit: "maybe",
+        tools: "Camera, ChatGPT, official app",
+        risk: "red",
+        source: "Message reality / security example"
+      },
+      {
+        id: "M012",
+        origin: "own",
+        cluster: "Relationships",
+        title: "Family or partner pressure message",
+        description: "A guilt-inducing personal message gets read slowly: ask, implication, pressure, and boundaried reply.",
+        why: "High emotional value, but sensitive and easy to overpathologize.",
+        fit: "maybe",
+        tools: "ChatGPT/Claude",
+        risk: "yellow/red",
+        source: "Message reality"
+      },
+      {
+        id: "M013",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Coach/guru/mentor pressure",
+        description: "A powerful but unsettling message from a coach or teacher gets checked for pressure, dependency, urgency, and financial manipulation.",
+        why: "Very Aurora-relevant, but sensitive and probably not first 21.",
+        fit: "maybe",
+        tools: "ChatGPT/Claude",
+        risk: "yellow/red",
+        source: "Message reality"
+      },
+      {
+        id: "F001",
+        origin: "own",
+        cluster: "Family logistics",
+        title: "Family calendar with layers",
+        description: "Shared family events get certainty levels, notes, sources, and updates across people.",
+        why: "Core future OS idea, but more app/product architecture than prompt card.",
+        fit: "maybe",
+        tools: "Calendar, chat, Aurora",
+        risk: "red",
+        source: "Family 2023"
+      },
+      {
+        id: "F002",
+        origin: "own",
+        cluster: "Family planning",
+        title: "Weekly family plan discussion",
+        description: "Travel, exams, guests, weekend ideas, and obligations become one family planning digest.",
+        why: "Strong future family OS behavior; not simple Journey card yet.",
+        fit: "maybe",
+        tools: "Calendar, chat, AI",
+        risk: "red",
+        source: "Family 2023"
+      },
+      {
+        id: "F004",
+        origin: "own",
+        cluster: "Memories",
+        title: "Family album curation",
+        description: "AI selects the best family photos from a trip or month and prepares a shareable set for relatives.",
+        why: "Emotional value and family connection, but photo permissions are heavy.",
+        fit: "maybe",
+        tools: "Photos, AI",
+        risk: "red",
+        source: "Family 2023 / curriculum future"
+      },
+      {
+        id: "F005",
+        origin: "own",
+        cluster: "Birthdays / gifts",
+        title: "Birthday planning and gift lists",
+        description: "Dates, gift hints, guest list, allergies, invitations, bookings, and reminders become one plan.",
+        why: "High family usefulness; may be too broad for one card.",
+        fit: "maybe",
+        tools: "Calendar, chat, AI",
+        risk: "yellow/red",
+        source: "Family 2023"
+      },
+      {
+        id: "F006",
+        origin: "own",
+        cluster: "Family inbox",
+        title: "Household requests inbox",
+        description: "Haircuts, gifts, missing socks, paper towels, and school trip lists become a shared family task inbox.",
+        why: "Good family OS behavior; less as a standalone prompt card.",
+        fit: "maybe",
+        tools: "Chat, Notes, AI",
+        risk: "yellow/red",
+        source: "Family 2023"
+      },
+      {
+        id: "F007",
+        origin: "own",
+        cluster: "Dinner logistics",
+        title: "Dinner: who cooks and how many",
+        description: "AI clarifies who cooks, who eats, when to remind, and whether to order, cook, or eat out.",
+        why: "Real family pain, but overlaps with Takeout Rescue Plan.",
+        fit: "maybe",
+        tools: "Chat, Calendar, AI",
+        risk: "yellow",
+        source: "Family 2023"
+      },
+      {
+        id: "F008",
+        origin: "own",
+        cluster: "School / purchases",
+        title: "School uniform tracker",
+        description: "Sizes, previous orders, missing items, and season changes become a reorder checklist.",
+        why: "Very practical for school-age families; narrower audience.",
+        fit: "maybe",
+        tools: "Camera, order history, AI",
+        risk: "yellow/red",
+        source: "Family 2023"
+      },
+      {
+        id: "F012",
+        origin: "own",
+        cluster: "Travel",
+        title: "Family travel planning",
+        description: "Term dates, family availability, ticket timing, check-in, and seats become an earlier, calmer plan.",
+        why: "Useful, but more execution-heavy than first Journey cards.",
+        fit: "maybe",
+        tools: "Search, calendar, email",
+        risk: "red",
+        source: "Family 2023"
+      },
+      {
+        id: "F013",
+        origin: "own",
+        cluster: "Cars / bills",
+        title: "Cars, MOT, tax, insurance reminders",
+        description: "Car obligations surface before due dates instead of becoming last-minute household panic.",
+        why: "Good deadline-memory case, but likely part of broader bill tracker.",
+        fit: "maybe",
+        tools: "Calendar, email, AI",
+        risk: "yellow/red",
+        source: "Family 2023"
+      },
+      {
+        id: "F014",
+        origin: "own",
+        cluster: "Utilities / bills",
+        title: "Utility payments tracker",
+        description: "Water, internet, phone, council tax, rent, and utility due dates become one reminder system.",
+        why: "Strong life admin, but overlaps with Utility Bill Spike Detective.",
+        fit: "maybe",
+        tools: "Bills, email, calendar",
+        risk: "red",
+        source: "Family 2023"
+      },
+      {
+        id: "M002",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Romance scam early warning",
+        description: "Messages from a new online romantic connection get checked for love bombing, secrecy, excuses, and unverifiable identity.",
+        why: "Important, but better as a subcase of Before You Reply in MVP.",
+        fit: "later",
+        tools: "ChatGPT/Claude, messages",
+        risk: "red",
+        source: "Message reality"
+      },
+      {
+        id: "M003",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "First money request",
+        description: "The first emergency money request from someone online becomes a pause-and-verify moment.",
+        why: "Strong, but subcase of Before You Reply.",
+        fit: "later",
+        tools: "ChatGPT/Claude, messages",
+        risk: "red",
+        source: "Message reality"
+      },
+      {
+        id: "M004",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Last hurdle before we can be together",
+        description: "A repeated final fee or obstacle gets mapped as a moving-goalpost / advance-fee pattern.",
+        why: "Too deep for first card; useful branch later.",
+        fit: "later",
+        tools: "ChatGPT/Claude, messages",
+        risk: "red",
+        source: "Message reality"
+      },
+      {
+        id: "M005",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Recovery scam after fraud",
+        description: "Someone offering to recover lost money for a fee gets checked for recovery-scam patterns.",
+        why: "Important but legally/emotionally heavier than MVP.",
+        fit: "later",
+        tools: "ChatGPT/Claude, messages",
+        risk: "red",
+        source: "Message reality"
+      },
+      {
+        id: "M008",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Suspicious investment or crypto opportunity",
+        description: "Guaranteed returns, fake dashboards, crypto transfers, withdrawal fees, and online mentors get stress-tested.",
+        why: "Useful but financial/legal risk is high.",
+        fit: "maybe",
+        tools: "ChatGPT, regulator search",
+        risk: "red",
+        source: "Message reality"
+      },
+      {
+        id: "M009",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Job or task scam",
+        description: "Remote job offers get checked for unrealistic pay, WhatsApp recruiters, upfront fees, and withdrawal traps.",
+        why: "Practical but less central to current 45-60 positioning.",
+        fit: "maybe",
+        tools: "Messages, ChatGPT, search",
+        risk: "yellow/red",
+        source: "Message reality"
+      },
+      {
+        id: "M014",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Travel invitation from online contact",
+        description: "An invitation to travel for someone met online becomes a safety and verification plan.",
+        why: "Important escalation branch, not a first MVP card.",
+        fit: "later",
+        tools: "ChatGPT, messages, maps",
+        risk: "red",
+        source: "Message reality"
+      },
+      {
+        id: "M016",
+        origin: "own",
+        cluster: "Digital safety",
+        title: "Family thinks I am wrong",
+        description: "Family concern gets separated from family tone so facts can be verified without choosing sides.",
+        why: "Subcase for recovery/escalation, too nuanced for MVP.",
+        fit: "later",
+        tools: "ChatGPT/Claude",
+        risk: "red",
+        source: "Message reality"
+      },
+      {
+        id: "F009",
+        origin: "own",
+        cluster: "School / activities",
+        title: "After-school clubs finder",
+        description: "AI finds, books, pays, and monitors changes for after-school clubs.",
+        why: "Execution-heavy and integration-heavy; later product surface.",
+        fit: "later",
+        tools: "Search, calendar, payments",
+        risk: "red",
+        source: "Family 2023"
+      },
+      {
+        id: "F010",
+        origin: "own",
+        cluster: "School logistics",
+        title: "Picking up after school",
+        description: "Family member assignment and reminders for school pickup.",
+        why: "App feature / reminder system, not a prompt-first card.",
+        fit: "later",
+        tools: "Calendar, chat, reminders",
+        risk: "red",
+        source: "Family 2023"
+      },
+      {
+        id: "F011",
+        origin: "own",
+        cluster: "Homework",
+        title: "Homework tracker and milestones",
+        description: "School homework status becomes started/completed/handed-in milestones and alerts.",
+        why: "Valuable, but school system integration makes it later.",
+        fit: "later",
+        tools: "School systems, AI",
+        risk: "red",
+        source: "Family 2023"
+      },
+      {
+        id: "R001",
+        origin: "reddit",
+        cluster: "Executive function",
+        title: "Plan my evening/day",
+        description: "After-work decision paralysis becomes a timed, good-enough evening or day plan.",
+        why: "Huge resonance with ADHD/executive function; can be adapted to Aurora voice.",
+        fit: "strong",
+        tools: "ChatGPT, Calendar, Notes",
+        risk: "green",
+        source: "Reddit / registry"
+      },
+      {
+        id: "R002",
+        origin: "reddit",
+        cluster: "Home / ADHD",
+        title: "AI cleaning assistant",
+        description: "A room or home reset becomes short sprints and a plan to follow without re-deciding.",
+        why: "Strong physical result and low setup.",
+        fit: "strong",
+        tools: "ChatGPT, Notes, Timer",
+        risk: "green",
+        source: "Reddit / registry"
+      },
+      {
+        id: "R003",
+        origin: "reddit",
+        cluster: "Executive function",
+        title: "Prioritize my tasks",
+        description: "When everything feels equally important, AI orders the first few steps and lowers start friction.",
+        why: "Very simple, likely support card or embedded behavior.",
+        fit: "strong",
+        tools: "ChatGPT, Notes",
+        risk: "green",
+        source: "Reddit"
+      },
+      {
+        id: "R005",
+        origin: "reddit",
+        cluster: "Perimenopause",
+        title: "Peri Brain: find the words",
+        description: "Brain fog, half-formed thoughts, and missing words become clear phrasing for work, doctors, or family.",
+        why: "Directly aligned with women 40+ and emotionally precise.",
+        fit: "strong",
+        tools: "ChatGPT/Claude, Notes, Voice",
+        risk: "green/yellow",
+        source: "Reddit / registry"
+      },
+      {
+        id: "R007",
+        origin: "reddit",
+        cluster: "Food / shopping",
+        title: "Grocery delivery plan from sales and leftovers",
+        description: "Sales, leftovers, allergies, and preferences become a weekly meal plan and cart-ready list.",
+        why: "Strong demand signal; overlaps with pantry/takeout/budget meal plan.",
+        fit: "strong",
+        tools: "ChatGPT, grocery apps, Notes",
+        risk: "yellow",
+        source: "Reddit"
+      },
+      {
+        id: "R015",
+        origin: "reddit",
+        cluster: "Food / budget",
+        title: "Budget meal plan",
+        description: "A weekly food budget, allergies, leftovers, and circular deals become a realistic cheap meal plan.",
+        why: "Strong broad need and practical household value.",
+        fit: "strong",
+        tools: "ChatGPT, grocery circulars",
+        risk: "yellow",
+        source: "Reddit"
+      },
+      {
+        id: "R023",
+        origin: "reddit",
+        cluster: "Money / impulse",
+        title: "Talk me out of buying this",
+        description: "Before a tempting purchase, AI stress-tests whether it fits budget, needs, and future regret.",
+        why: "Funny, sharp, very cardable anti-impulse case.",
+        fit: "strong",
+        tools: "ChatGPT",
+        risk: "green/yellow",
+        source: "Reddit"
+      },
+      {
+        id: "R025",
+        origin: "reddit",
+        cluster: "Home / declutter",
+        title: "6-day declutter sprint",
+        description: "A cluttered room or two-room mess becomes a short multi-day plan with daily actions.",
+        why: "Simple, physical, and supportive without shame.",
+        fit: "strong",
+        tools: "ChatGPT, Notes",
+        risk: "green",
+        source: "Reddit"
+      },
+      {
+        id: "R026",
+        origin: "reddit",
+        cluster: "Home / safety",
+        title: "Found mold or leak",
+        description: "A photo of mold, leak, wall damage, or plumbing issue becomes documentation and next steps.",
+        why: "Strong visual case and safety/home-admin value.",
+        fit: "strong",
+        tools: "Camera, ChatGPT, Notes",
+        risk: "yellow",
+        source: "Reddit / use cases thread"
+      },
+      {
+        id: "R004",
+        origin: "reddit",
+        cluster: "Self-care",
+        title: "Mental health day schedule",
+        description: "A rest day gets gentle structure: meals, breaks, walk, reset, and no over-optimization.",
+        why: "Tone-aligned but must avoid therapeutic claims.",
+        fit: "maybe",
+        tools: "ChatGPT, Calendar",
+        risk: "green/yellow",
+        source: "Reddit"
+      },
+      {
+        id: "R009",
+        origin: "reddit",
+        cluster: "Aging parents",
+        title: "Mom's insurance paperwork",
+        description: "Insurance documents for an aging parent become a summary, questions, and next call script.",
+        why: "High-value sandwich-generation case, overlaps with medical/insurance bills.",
+        fit: "maybe",
+        tools: "PDFs, ChatGPT/Claude",
+        risk: "red",
+        source: "Reddit"
+      },
+      {
+        id: "R010",
+        origin: "reddit",
+        cluster: "Aging parents",
+        title: "Visual instructions for parent",
+        description: "A photo of a device, button, remote, or car control becomes step-by-step visual instructions.",
+        why: "Caring, practical, good family bridge.",
+        fit: "maybe",
+        tools: "Camera, ChatGPT",
+        risk: "green/yellow",
+        source: "Reddit"
+      },
+      {
+        id: "R012",
+        origin: "reddit",
+        cluster: "Kids / play",
+        title: "Coloring pages on demand",
+        description: "A child asks for any story or creature, and AI generates a custom coloring page.",
+        why: "Easy wow, but not core 45-60 unless grandparent/child angle.",
+        fit: "maybe",
+        tools: "ChatGPT image",
+        risk: "green",
+        source: "Reddit"
+      },
+      {
+        id: "R013",
+        origin: "reddit",
+        cluster: "Kids / bedtime",
+        title: "Personalized bedtime story",
+        description: "AI creates a bedtime story with the child's name, interests, and current emotional theme.",
+        why: "Warm but common; maybe not differentiating.",
+        fit: "maybe",
+        tools: "ChatGPT",
+        risk: "green",
+        source: "Reddit"
+      },
+      {
+        id: "R017",
+        origin: "reddit",
+        cluster: "Food / planning",
+        title: "7-day meal prep",
+        description: "Recipes, portions, prep order, shopping list, and storage become one weekly food plan.",
+        why: "Useful, but can feel like generic meal prep unless Aurora tone is strong.",
+        fit: "maybe",
+        tools: "ChatGPT, Notes",
+        risk: "green/yellow",
+        source: "Reddit"
+      },
+      {
+        id: "R021",
+        origin: "reddit",
+        cluster: "Social / family",
+        title: "Thank-you notes",
+        description: "Gift list and relationship context become personalized thank-you messages.",
+        why: "Light, useful, but maybe too small for core Journey.",
+        fit: "maybe",
+        tools: "ChatGPT",
+        risk: "green",
+        source: "Reddit"
+      },
+      {
+        id: "R022",
+        origin: "reddit",
+        cluster: "Money",
+        title: "Debt payment plan",
+        description: "Income, dates, debts, and expenses become a payoff plan and calendar.",
+        why: "High value, but financial advice risk and may need careful guardrails.",
+        fit: "maybe",
+        tools: "ChatGPT, Sheets",
+        risk: "red",
+        source: "Reddit"
+      },
+      {
+        id: "R028",
+        origin: "reddit",
+        cluster: "Legal / communication",
+        title: "Demand letter",
+        description: "A service dispute or blocked account becomes a concise formal letter.",
+        why: "Useful but legal-ish and less central to household Journey.",
+        fit: "maybe",
+        tools: "ChatGPT",
+        risk: "yellow/red",
+        source: "Reddit"
+      },
+      {
+        id: "R006",
+        origin: "reddit",
+        cluster: "Work / motherhood",
+        title: "Comeback after maternity leave",
+        description: "A first 90-day return-to-work plan after maternity leave, including energy and support needs.",
+        why: "Strong story, but not core 45-60.",
+        fit: "narrow",
+        tools: "ChatGPT, Calendar, Notes",
+        risk: "green/yellow",
+        source: "Reddit / use cases thread"
+      },
+      {
+        id: "R014",
+        origin: "reddit",
+        cluster: "Parenting / night",
+        title: "Night weaning plan",
+        description: "A 3am parenting overwhelm moment becomes a gentle plan and emotional support.",
+        why: "Emotionally strong, but not current target age.",
+        fit: "narrow",
+        tools: "ChatGPT",
+        risk: "yellow",
+        source: "Reddit"
+      },
+      {
+        id: "R016",
+        origin: "reddit",
+        cluster: "Health / food",
+        title: "Gestational diabetes menu",
+        description: "Daily meal ideas constrained by blood sugar needs and pregnancy context.",
+        why: "Medical and not current audience.",
+        fit: "narrow",
+        tools: "ChatGPT",
+        risk: "red",
+        source: "Reddit"
+      },
+      {
+        id: "R018",
+        origin: "reddit",
+        cluster: "Baby admin",
+        title: "Birth plan",
+        description: "Preferences and questions become a birth plan for discussion with clinicians.",
+        why: "Not current audience and medical context.",
+        fit: "narrow",
+        tools: "ChatGPT",
+        risk: "red",
+        source: "Reddit"
+      },
+      {
+        id: "R019",
+        origin: "reddit",
+        cluster: "Baby admin",
+        title: "Baby prep checklist",
+        description: "Pregnancy/newborn overwhelm becomes a preparation checklist.",
+        why: "Not current audience.",
+        fit: "narrow",
+        tools: "ChatGPT",
+        risk: "green/yellow",
+        source: "Reddit"
+      },
+      {
+        id: "R020",
+        origin: "reddit",
+        cluster: "Work / baby",
+        title: "Pumping accommodations email",
+        description: "A new mother gets a tactful HR email requesting pumping accommodations.",
+        why: "Good AI-writing case but not current audience.",
+        fit: "narrow",
+        tools: "ChatGPT",
+        risk: "yellow",
+        source: "Reddit"
+      },
+      {
+        id: "R008",
+        origin: "reddit",
+        cluster: "Aging parents",
+        title: "Voice companion for elderly parent",
+        description: "An AI phone companion talks with an older parent and reduces caregiver load.",
+        why: "Powerful future direction, but not a simple v1 prompt card.",
+        fit: "later",
+        tools: "Voice AI, phone",
+        risk: "red",
+        source: "Reddit / future"
+      },
+      {
+        id: "R011",
+        origin: "reddit",
+        cluster: "Kids / accessibility",
+        title: "Communication cards for nonverbal child",
+        description: "AI-generated picture cards help a nonverbal child communicate needs and choices.",
+        why: "High impact but specialized and safety-sensitive.",
+        fit: "later",
+        tools: "ChatGPT image, printer/tablet",
+        risk: "red",
+        source: "Reddit"
+      },
+      {
+        id: "R024",
+        origin: "reddit",
+        cluster: "Habits",
+        title: "Quit smoking support",
+        description: "AI provides a quitting plan, motivation, and tracking support.",
+        why: "Behavioral health risk; later with stronger guardrails.",
+        fit: "later",
+        tools: "ChatGPT",
+        risk: "red",
+        source: "Reddit"
+      },
+      {
+        id: "R027",
+        origin: "reddit",
+        cluster: "Legal / documents",
+        title: "Inheritance fraud document audit",
+        description: "Complex probate or inheritance documents get organized and suspicious patterns surfaced.",
+        why: "Too legally heavy for first Journey, but validates document power.",
+        fit: "later",
+        tools: "PDFs, ChatGPT/Claude",
+        risk: "red",
+        source: "Reddit"
+      },
+      {
+        id: "E001",
+        origin: "support",
+        cluster: "Education",
+        title: "What is a prompt?",
+        description: "A simple card explaining how to ask AI for useful results and how to iterate.",
+        why: "Support layer, not a household use case.",
+        fit: "educational",
+        tools: "ChatGPT/Claude",
+        risk: "green",
+        source: "Registry"
+      },
+      {
+        id: "E002",
+        origin: "support",
+        cluster: "Education / safety",
+        title: "Hallucinations and how to catch them",
+        description: "Teach the user that AI can be wrong and show simple verification habits.",
+        why: "Essential safety support for Journey.",
+        fit: "educational",
+        tools: "ChatGPT/Claude",
+        risk: "green",
+        source: "Registry"
+      },
+      {
+        id: "E003",
+        origin: "support",
+        cluster: "Education / safety",
+        title: "Data safety: green/yellow/red",
+        description: "Explain what data is safe to paste, what to redact, and what requires extra care.",
+        why: "Should accompany yellow/red cards.",
+        fit: "educational",
+        tools: "ChatGPT/Claude",
+        risk: "green",
+        source: "Registry"
+      },
+      {
+        id: "E004",
+        origin: "support",
+        cluster: "Setup",
+        title: "How to subscribe to ChatGPT/Claude",
+        description: "Remove tool-access anxiety by showing free vs paid, what is needed, and what can be skipped.",
+        why: "Support/instruction card, not one of the core 21 unless onboarding includes setup.",
+        fit: "support",
+        tools: "Browser, app store",
+        risk: "green",
+        source: "Registry"
+      },
+      {
+        id: "E005",
+        origin: "support",
+        cluster: "Setup",
+        title: "Google Sheets basics",
+        description: "Show how to paste AI output into a simple table and use filters or color rules.",
+        why: "Useful support for sheet-based cards.",
+        fit: "support",
+        tools: "Sheets",
+        risk: "green",
+        source: "Registry"
+      }
+    ];
+
+    const storageKey = "auroraJourneyCaseReview.v1";
+    const defaultOriginOrder = { own: 0, support: 1, reddit: 2 };
+    let state = loadState();
+
+    const grid = document.getElementById("grid");
+    const empty = document.getElementById("empty");
+    const stats = document.getElementById("stats");
+    const search = document.getElementById("search");
+    const originFilter = document.getElementById("originFilter");
+    const fitFilter = document.getElementById("fitFilter");
+    const riskFilter = document.getElementById("riskFilter");
+    const viewFilter = document.getElementById("viewFilter");
+    const reviewerName = document.getElementById("reviewerName");
+    const reviewerEmail = document.getElementById("reviewerEmail");
+    const newCases = document.getElementById("newCases");
+    const submitStatus = document.getElementById("submitStatus");
+
+    function loadState() {
+      try {
+        return JSON.parse(localStorage.getItem(storageKey)) || {};
+      } catch (_err) {
+        return {};
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(storageKey, JSON.stringify(state));
+      render();
+    }
+
+    function caseState(id) {
+      if (!state[id]) state[id] = { in21: false, designer: false, priority: "", notes: "" };
+      return state[id];
+    }
+
+    function markedCases() {
+      return cases
+        .map(card => ({ card, review: caseState(card.id) }))
+        .filter(({ review }) => review.in21 || review.designer || review.priority || review.notes);
+    }
+
+    function riskClass(risk) {
+      if (risk.includes("red")) return "red";
+      if (risk.includes("yellow")) return "yellow";
+      return "green";
+    }
+
+    function matches(card) {
+      const st = caseState(card.id);
+      const q = search.value.trim().toLowerCase();
+      const haystack = [card.id, card.title, card.cluster, card.description, card.why, card.tools, card.source, card.fit, card.risk].join(" ").toLowerCase();
+
+      if (q && !haystack.includes(q)) return false;
+      if (originFilter.value !== "all" && card.origin !== originFilter.value) return false;
+      if (fitFilter.value !== "all" && card.fit !== fitFilter.value) return false;
+      if (riskFilter.value !== "all" && !card.risk.includes(riskFilter.value)) return false;
+      if (viewFilter.value === "in21" && !st.in21) return false;
+      if (viewFilter.value === "designer" && !st.designer) return false;
+      if (viewFilter.value === "priorityA" && st.priority !== "A") return false;
+      if (viewFilter.value === "unmarked" && (st.in21 || st.designer || st.priority || st.notes)) return false;
+      return true;
+    }
+
+    function sortedCases() {
+      return cases
+        .slice()
+        .sort((a, b) => {
+          const oa = defaultOriginOrder[a.origin] ?? 9;
+          const ob = defaultOriginOrder[b.origin] ?? 9;
+          if (oa !== ob) return oa - ob;
+          const fitOrder = { strong: 0, maybe: 1, educational: 2, support: 3, narrow: 4, later: 5 };
+          const fa = fitOrder[a.fit] ?? 9;
+          const fb = fitOrder[b.fit] ?? 9;
+          if (fa !== fb) return fa - fb;
+          return a.id.localeCompare(b.id);
+        });
+    }
+
+    function render() {
+      const visible = sortedCases().filter(matches);
+      grid.innerHTML = visible.map(renderCard).join("");
+      empty.style.display = visible.length ? "none" : "block";
+      attachEvents();
+      renderStats(visible.length);
+    }
+
+    function renderCard(card) {
+      const st = caseState(card.id);
+      const originLabel = card.origin === "own" ? "my / Aurora" : card.origin;
+      return `
+        <article class="case-card" data-id="${card.id}">
+          <div class="case-top">
+            <div>
+              <div class="id">${card.id}</div>
+              <h2>${escapeHtml(card.title)}</h2>
+            </div>
+            <div class="cluster">${escapeHtml(card.cluster)}</div>
+          </div>
+          <div class="desc">${escapeHtml(card.description)}</div>
+          <div class="why">${escapeHtml(card.why)}</div>
+          <div class="tags">
+            <span class="tag ${card.origin}">${originLabel}</span>
+            <span class="tag ${card.fit}">fit: ${card.fit}</span>
+            <span class="tag ${riskClass(card.risk)}">risk: ${card.risk}</span>
+            <span class="tag">${escapeHtml(card.tools)}</span>
+          </div>
+          <div class="source">Source: ${escapeHtml(card.source)}</div>
+          <div class="controls">
+            <label class="check"><input type="checkbox" data-field="in21" ${st.in21 ? "checked" : ""}> In 21</label>
+            <label class="check"><input type="checkbox" data-field="designer" ${st.designer ? "checked" : ""}> To designer</label>
+            <select class="priority" data-field="priority">
+              <option value="" ${st.priority === "" ? "selected" : ""}>Priority</option>
+              <option value="A" ${st.priority === "A" ? "selected" : ""}>A</option>
+              <option value="B" ${st.priority === "B" ? "selected" : ""}>B</option>
+              <option value="C" ${st.priority === "C" ? "selected" : ""}>C</option>
+              <option value="Later" ${st.priority === "Later" ? "selected" : ""}>Later</option>
+              <option value="No" ${st.priority === "No" ? "selected" : ""}>No</option>
+            </select>
+          </div>
+          <textarea data-field="notes" placeholder="Notes / decision / rewrite title...">${escapeHtml(st.notes || "")}</textarea>
+        </article>
+      `;
+    }
+
+    function attachEvents() {
+      grid.querySelectorAll(".case-card").forEach(cardEl => {
+        const id = cardEl.dataset.id;
+        const st = caseState(id);
+        cardEl.querySelectorAll("input[type='checkbox']").forEach(input => {
+          input.addEventListener("change", () => {
+            st[input.dataset.field] = input.checked;
+            saveState();
+          });
+        });
+        cardEl.querySelector("select[data-field='priority']").addEventListener("change", event => {
+          st.priority = event.target.value;
+          saveState();
+        });
+        cardEl.querySelector("textarea[data-field='notes']").addEventListener("input", event => {
+          st.notes = event.target.value;
+          localStorage.setItem(storageKey, JSON.stringify(state));
+          renderStats(document.querySelectorAll(".case-card").length);
+        });
+      });
+    }
+
+    function renderStats(visibleCount) {
+      const all = cases.length;
+      const in21 = cases.filter(c => caseState(c.id).in21).length;
+      const designer = cases.filter(c => caseState(c.id).designer).length;
+      const a = cases.filter(c => caseState(c.id).priority === "A").length;
+      const own = cases.filter(c => c.origin === "own").length;
+      const reddit = cases.filter(c => c.origin === "reddit").length;
+      stats.innerHTML = `
+        <span class="pill">Visible: ${visibleCount}</span>
+        <span class="pill">Total: ${all}</span>
+        <span class="pill">My/Aurora: ${own}</span>
+        <span class="pill">Reddit: ${reddit}</span>
+        <span class="pill">Marked In 21: ${in21}</span>
+        <span class="pill">To designer: ${designer}</span>
+        <span class="pill">Priority A: ${a}</span>
+      `;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function exportMarked() {
+      const rows = [["ID", "In 21", "To designer", "Priority", "Origin", "Cluster", "Case", "Fit", "Risk", "Source", "Notes"]];
+      markedCases().forEach(({ card, review: st }) => {
+        if (st.in21 || st.designer || st.priority || st.notes) {
+          rows.push([
+            card.id,
+            st.in21 ? "yes" : "",
+            st.designer ? "yes" : "",
+            st.priority,
+            card.origin,
+            card.cluster,
+            card.title,
+            card.fit,
+            card.risk,
+            card.source,
+            st.notes || ""
+          ]);
+        }
+      });
+      const tsv = rows.map(row => row.map(cell => String(cell).replaceAll("\t", " ").replaceAll("\n", " ")).join("\t")).join("\n");
+      navigator.clipboard.writeText(tsv).then(() => {
+        alert("Marked cases copied as TSV.");
+      }).catch(() => {
+        prompt("Copy marked TSV:", tsv);
+      });
+    }
+
+    async function submitReview() {
+      const name = reviewerName.value.trim();
+      if (!name) {
+        submitStatus.textContent = "Please enter your name before submitting.";
+        reviewerName.focus();
+        return;
+      }
+
+      const marked = markedCases().map(({ card, review }) => ({
+        id: card.id,
+        title: card.title,
+        cluster: card.cluster,
+        origin: card.origin,
+        fit: card.fit,
+        risk: card.risk,
+        source: card.source,
+        in21: !!review.in21,
+        toDesigner: !!review.designer,
+        priority: review.priority || "",
+        notes: review.notes || ""
+      }));
+
+      const payload = {
+        timestamp: new Date().toISOString(),
+        name,
+        email: reviewerEmail.value.trim(),
+        start: "case_library_review",
+        ai: "review_board",
+        hope: `Marked In 21: ${marked.filter(c => c.in21).length}; To designer: ${marked.filter(c => c.toDesigner).length}; Priority A: ${marked.filter(c => c.priority === "A").length}`,
+        build_first: marked.filter(c => c.in21).map(c => `${c.id}: ${c.title}`).join("; "),
+        open_response: JSON.stringify({
+          reviewer: { name, email: reviewerEmail.value.trim() },
+          newCases: newCases.value.trim(),
+          marked
+        }),
+        ref: window.location.href
+      };
+
+      submitStatus.textContent = "Submitting...";
+      document.getElementById("submitReviewBtn").disabled = true;
+
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        submitStatus.textContent = "Submitted. Thank you.";
+      } catch (err) {
+        console.error(err);
+        submitStatus.textContent = "Submit failed. Please export TSV and send it manually.";
+      } finally {
+        document.getElementById("submitReviewBtn").disabled = false;
+      }
+    }
+
+    [search, originFilter, fitFilter, riskFilter, viewFilter].forEach(el => el.addEventListener("input", render));
+    document.getElementById("exportBtn").addEventListener("click", exportMarked);
+    document.getElementById("submitReviewBtn").addEventListener("click", submitReview);
+    document.getElementById("resetFiltersBtn").addEventListener("click", () => {
+      search.value = "";
+      originFilter.value = "all";
+      fitFilter.value = "all";
+      riskFilter.value = "all";
+      viewFilter.value = "all";
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
